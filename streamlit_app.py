@@ -26,7 +26,7 @@ LOG_FILE = "prediction_log.csv"
 @st.cache_resource
 def load_artifacts():
     # Load Model and Scaler
-    model_path = "artifacts/cvd_best_pipeline.joblib"
+    model_path = "artifacts/cvd_pipeline.joblib"
     scaler_path = "artifacts/scaler.joblib" 
     
     model = None
