@@ -6,6 +6,9 @@ from plotly.subplots import make_subplots
 import joblib
 import numpy as np
 import os
+import csv
+import threading
+from datetime import datetime
 
 # --- PAGE CONFIGURATION ---
 st.set_page_config(
@@ -14,6 +17,10 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="collapsed"
 )
+
+# --- LOCK FOR THREAD-SAFE LOGGING ---
+log_lock = threading.Lock()
+LOG_FILE = "prediction_log.csv"
 
 # --- 1. LOAD RESOURCES (Model, Scaler, Data) ---
 @st.cache_resource
@@ -66,11 +73,11 @@ st.markdown("""
 st.title("Cardiovascular Health Dashboard")
 
 # ==========================================
-# PART 1: LIVE PREDICTION
+# PART 1: LIVE PREDICTION & LOGGING
 # ==========================================
 st.markdown("### 🏥 Live Risk Prediction")
 with st.container(border=True):
-    st.info("Enter patient details below to calculate CVD risk.")
+    st.info("Enter patient details below to calculate CVD risk. Data will be logged for monitoring.")
     
     # Input Row 1
     c1, c2, c3, c4 = st.columns(4)
@@ -141,6 +148,24 @@ with st.container(border=True):
                 </div>
                 """, unsafe_allow_html=True)
                 
+                # 6. LOGGING (Replicating api.py functionality)
+                try:
+                    with log_lock:
+                        log_entry = input_dict.copy()
+                        log_entry['prediction_probability'] = prob
+                        log_entry['prediction_class'] = pred_class
+                        log_entry['timestamp'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                        
+                        file_exists = os.path.isfile(LOG_FILE)
+                        with open(LOG_FILE, 'a', newline='') as f:
+                            writer = csv.DictWriter(f, fieldnames=log_entry.keys())
+                            if not file_exists:
+                                writer.writeheader()
+                            writer.writerow(log_entry)
+                    st.success("✅ Prediction logged successfully.")
+                except Exception as log_err:
+                    st.warning(f"⚠️ Prediction shown, but logging failed: {log_err}")
+
             except Exception as e:
                 st.error(f"Error during processing: {str(e)}")
 
@@ -404,3 +429,8 @@ with st.container(border=True):
         )
         fig_inter.update_layout(height=400)
         st.plotly_chart(fig_inter, use_container_width=True)
+
+# 10. Data Table
+st.subheader("Patient Data Records")
+with st.expander("View Raw Data", expanded=False):
+    st.dataframe(df.head(100), use_container_width=True)
