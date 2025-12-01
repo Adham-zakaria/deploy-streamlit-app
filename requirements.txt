@@ -3,6 +3,5 @@ pandas
 plotly>=5.0.0
 joblib
 numpy
-scikit-learn>=1.3.0
-kaleido
-packaging
+scikit-learn==1.5.0
+scipy
