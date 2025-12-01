@@ -19,8 +19,8 @@ st.set_page_config(
 @st.cache_resource
 def load_artifacts():
     # Load Model and Scaler
-    model_path = "artifacts/cvd_pipeline.joblib"
-    scaler_path = "artifacts/cvd_scaler.joblib"
+    model_path = "cvd_pipeline.joblib"
+    scaler_path = "cvd_scaler.joblib"
 
     model = None
     scaler = None
