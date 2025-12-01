@@ -68,7 +68,7 @@ st.title("Cardiovascular Health Dashboard")
 # ==========================================
 # PART 1: LIVE PREDICTION
 # ==========================================
-st.markdown("### 🏥 Live Risk Prediction")
+st.markdown("### Live Risk Prediction")
 with st.container(border=True):
     st.info("Enter patient details below to calculate CVD risk.")
     
