@@ -119,7 +119,7 @@ if model is not None and scaler is not None:
         # Input Row 1
         c1, c2, c3, c4 = st.columns(4)
         with c1:
-            age = st.number_input("Age (Years)", 30, 100, 50)
+            age = st.number_input("Age (Years)", 0, 100, 50)
         with c2:
             gender = st.selectbox(
                 "Gender",
@@ -127,16 +127,16 @@ if model is not None and scaler is not None:
                 format_func=lambda x: x[0],
             )
         with c3:
-            height = st.number_input("Height (cm)", 100, 250, 165)
+            height = st.number_input("Height (cm)", 140, 250, 165)
         with c4:
-            weight = st.number_input("Weight (kg)", 30, 200, 70)
+            weight = st.number_input("Weight (kg)", 20, 200, 70)
 
         # Input Row 2
         c5, c6, c7, c8 = st.columns(4)
         with c5:
-            ap_hi = st.number_input("Systolic BP", 60, 250, 120)
+            ap_hi = st.number_input("Systolic BP", 50, 250, 120)
         with c6:
-            ap_lo = st.number_input("Diastolic BP", 40, 150, 80)
+            ap_lo = st.number_input("Diastolic BP", 30, 150, 80)
         with c7:
             cholesterol = st.selectbox(
                 "Cholesterol",
